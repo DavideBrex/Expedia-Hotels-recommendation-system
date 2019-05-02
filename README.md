@@ -1,1 +1,1 @@
-# Data_mining_ass2
+# Data mining assignment 2
