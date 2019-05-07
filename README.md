@@ -1,4 +1,6 @@
 # Data mining assignment 2
+## Detailed task description
+### Business understanding
 
 ## To do:
 - [ ] Read the file with the explanation
