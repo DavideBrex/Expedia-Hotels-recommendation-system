@@ -28,7 +28,18 @@ def features_addition(dataset):
     # Average comp price
     data['avg_comp_rate'] = data[['comp1_rate', 'comp2_rate', 'comp3_rate', 'comp4_rate', 'comp5_rate', 'comp6_rate', 'comp7_rate', 'comp8_rate']].mean(axis=1)
     data = data.drop(['comp1_rate', "comp1_inv", "comp1_rate_percent_diff", 'comp2_rate', "comp2_inv", "comp2_rate_percent_diff", 'comp3_rate', "comp3_inv", "comp3_rate_percent_diff", 'comp4_rate', "comp4_inv", "comp4_rate_percent_diff", 'comp5_rate', "comp5_inv", "comp5_rate_percent_diff", 'comp6_rate', "comp6_inv", "comp6_rate_percent_diff", 'comp7_rate', "comp7_inv", "comp7_rate_percent_diff", 'comp8_rate', "comp8_inv", "comp8_rate_percent_diff"], axis = 1)
-    data = data.fillna(value = {"avg_comp_rate": 0})        
+    data = data.fillna(value = {"avg_comp_rate": 0}) 
+    
+    #add month columns
+    data["date_time"] = pd.to_datetime(data["date_time"])
+    data["month"] = data["date_time"].dt.month
+    data = data.drop("date_time", axis=1)
+
+    #there are some infinite values in usd_diff
+    data= data.replace([np.inf, -np.inf], np.nan)
+    #train.columns[train.isna().any()].tolist()
+    data=data.fillna(value={"usd_diff":0})
+
     return data
 
 def fill_nan(data):
@@ -41,6 +52,10 @@ def fill_nan(data):
     #replace NaN for worst case scenario, in this case -326.567500 which is the minimum value for this feature
     data["srch_query_affinity_score"] = data["srch_query_affinity_score"].replace(np.nan, -326.567500)
 
+    #fill Nan
+    data=data.drop("gross_bookings_usd",axis=1)
+    values = {'visitor_hist_starrating': 0, 'visitor_hist_adr_usd': 0}
+    data=data.fillna(value=values)
     return data
 
 def balancing_dataset(data):
@@ -68,6 +83,16 @@ def balancing_dataset(data):
 
     return final_train
 
+def assign_score(x):
+    if x["booking_bool"]==1:
+        val=5
+    elif x["click_bool"]==1:
+        val=1
+    else:
+        val=0
+    return val
+    
+
 def main():
     path="C://Users//david\Desktop//VU amsterdam//Data mining"
     data = pd.read_csv(path+"/training_set_VU_DM.csv")
@@ -85,7 +110,14 @@ def main():
     new_data = features_addition(after_nan)
     print("Final dataset: \n")
     print(new_data)
-    new_data.to_csv(path+"test_result.csv")
+    # add score column (only for train set!):
+    #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
+    #new_data['score'] = new_data.apply(assign_score , axis=1)
+
+    #drop search id?
+    new_data = new_data.drop("srch_id", axis=1)
+    #store resulting dataset
+    new_data.to_csv(path+"/test_result.csv")
 
 
 
