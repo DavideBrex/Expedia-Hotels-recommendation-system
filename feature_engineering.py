@@ -14,7 +14,7 @@ def features_addition(dataset):
     # times booked / times in the data
     # times clicked / times in the data
     hotel_quality = pd.DataFrame(dataset.prop_id.value_counts(dropna = False))
-    print(hotel_quality.head())
+    #print(hotel_quality.head())
     hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.booking_bool == 1].value_counts().astype(int)), rsuffix = "book")
     hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.click_bool == 1].value_counts().astype(int)), rsuffix = "click")
     hotel_quality.columns = ["counts", "booked", "clicked"]
@@ -53,7 +53,7 @@ def fill_nan(data):
     data["srch_query_affinity_score"] = data["srch_query_affinity_score"].replace(np.nan, -326.567500)
 
     #fill Nan
-    data=data.drop("gross_bookings_usd",axis=1)
+    #data=data.drop("gross_bookings_usd",axis=1)
     values = {'visitor_hist_starrating': 0, 'visitor_hist_adr_usd': 0}
     data=data.fillna(value=values)
     return data
@@ -95,13 +95,14 @@ def assign_score(x):
 
 def main():
     path="C://Users//david\Desktop//VU amsterdam//Data mining"
-    data = pd.read_csv(path+"/training_set_VU_DM.csv")
-    print("original dataset: \n")
-    print(data)
+    data = pd.read_csv(path+"/test_set_VU_DM.csv")
+    #print("original dataset: \n")
+    #print(data)
     #downsampling the dataset
-    after_reduction=balancing_dataset(data)
+    #after_reduction=balancing_dataset(data)
     # fill Nan
     print("Before fill Nan: \n")
+    after_reduction=data
     print(after_reduction)
     after_nan=fill_nan(after_reduction)
     #add new features
@@ -115,9 +116,9 @@ def main():
     #new_data['score'] = new_data.apply(assign_score , axis=1)
 
     #drop search id?
-    new_data = new_data.drop("srch_id", axis=1)
+    #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset
-    new_data.to_csv(path+"/test_result.csv")
+    new_data.to_csv(path+"/new_test_set.csv")
 
 
 
