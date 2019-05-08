@@ -23,7 +23,7 @@ def dcg(scores):
 	"""
 	return np.sum([
 						(np.power(2, scores[i]) - 1) / np.log2(i + 2)
-						for i in xrange(len(scores))
+						for i in range(len(scores))
 					])
 
 def dcg_k(scores, k):
@@ -43,7 +43,7 @@ def dcg_k(scores, k):
 	"""
 	return np.sum([
 						(np.power(2, scores[i]) - 1) / np.log2(i + 2)
-						for i in xrange(len(scores[:k]))
+						for i in range(len(scores[:k]))
 					])
 
 def ideal_dcg(scores):
@@ -193,8 +193,8 @@ def get_pairs(scores):
 	for query_scores in scores:
 		temp = sorted(query_scores, reverse=True)
 		pairs = []
-		for i in xrange(len(temp)):
-			for j in xrange(len(temp)):
+		for i in range(len(temp)):
+			for j in range(len(temp)):
 				if temp[i] > temp[j]:
 					pairs.append((i,j))
 		query_pair.append(pairs)
@@ -242,7 +242,7 @@ class LambdaMART:
 		# ideal dcg calculation
 		idcg = [ideal_dcg(scores) for scores in true_scores]
 
-		for k in xrange(self.number_of_trees):
+		for k in range(self.number_of_trees):
 			print('Tree %d' % (k))
 			lambdas = np.zeros(len(predicted_scores))
 			w = np.zeros(len(predicted_scores))
