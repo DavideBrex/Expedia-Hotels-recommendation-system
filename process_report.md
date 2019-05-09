@@ -10,4 +10,5 @@ We have to keep track of the when we performed some tasks
 | 6/05 | Downsamplig of the train set  |  Dav |
 | 7/05 | Start looking at LambdaMART and RandomForest   |  Dav  |
 | 9/05 | Running on the small training set of LambdaMART / randomForest regression and Elastic Net   |  Dav  |
+| 9/05 |  Report writing: handling Nan and Feature engineering   |  M |
 
