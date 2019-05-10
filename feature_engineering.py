@@ -17,7 +17,7 @@ def features_addition(dataset, test):
         hotels_train.columns=["prop_id", "booked_perc", "clicked_perc"]
         data=data.join(hotels_train.set_index("prop_id"),how="left", on="prop_id")
         #substitue with mean percentage
-        data = data.fillna(value = {"booked_percentage": 2.89, "clicked_percentage": 5.01})
+        data = data.fillna(value = {"booked_perc": 2.89, "clicked_perc": 5.01})
 
     else:
         # Hotel quality
