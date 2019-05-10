@@ -4,27 +4,38 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.datasets import dump_svmlight_file
 
-def features_addition(dataset):
+def features_addition(dataset, test):
     data=dataset
     data["starrating_diff"] = abs(data["visitor_hist_starrating"] - data["prop_starrating"])
     data["usd_diff"] = abs(np.log10(data["visitor_hist_adr_usd"]) - np.log10(data["price_usd"]))
     data = data.fillna(value = {"starrating_diff": 6, "usd_diff": 1.1})
 
-    # Hotel quality
-    # times booked / times in the data
-    # times clicked / times in the data
-    hotel_quality = pd.DataFrame(dataset.prop_id.value_counts(dropna = False))
-    #print(hotel_quality.head())
-    hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.booking_bool == 1].value_counts().astype(int)), rsuffix = "book")
-    hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.click_bool == 1].value_counts().astype(int)), rsuffix = "click")
-    hotel_quality.columns = ["counts", "booked", "clicked"]
 
-    hotel_quality["booked_percentage"] = hotel_quality.booked / hotel_quality.counts * 100
-    hotel_quality["clicked_percentage"] = hotel_quality.clicked / hotel_quality.counts * 100
+    if test==True:
+        path="C://Users//david\Desktop//VU amsterdam//Data mining"
+        hotels_train = pd.read_csv(path+"//hotel_quality.csv")
+        hotels_train.columns=["prop_id", "booked_perc", "clicked_perc"]
+        data=data.join(hotels_train.set_index("prop_id"),how="left", on="prop_id")
+        #substitue with mean percentage
+        data = data.fillna(value = {"booked_percentage": 2.89, "clicked_percentage": 5.01})
 
-    data = data.join(hotel_quality.booked_percentage, on = "prop_id")
-    data = data.join(hotel_quality.clicked_percentage, on = "prop_id")
-    data = data.fillna(value = {"booked_percentage": 0, "clicked_percentage": 0})
+    else:
+        # Hotel quality
+        # times booked / times in the data
+        # times clicked / times in the data
+        hotel_quality = pd.DataFrame(dataset.prop_id.value_counts(dropna = False))
+        #print(hotel_quality.head())
+        hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.booking_bool == 1].value_counts().astype(int)), rsuffix = "book")
+        hotel_quality = hotel_quality.join(pd.DataFrame(dataset.prop_id[dataset.click_bool == 1].value_counts().astype(int)), rsuffix = "click")
+        hotel_quality.columns = ["counts", "booked", "clicked"]
+
+        hotel_quality["booked_percentage"] = hotel_quality.booked / hotel_quality.counts * 100
+        hotel_quality["clicked_percentage"] = hotel_quality.clicked / hotel_quality.counts * 100
+
+        data = data.join(hotel_quality.booked_percentage, on = "prop_id")
+        data = data.join(hotel_quality.clicked_percentage, on = "prop_id")
+        data = data.fillna(value = {"booked_percentage": 0, "clicked_percentage": 0})
+    
     # Average comp price
     data['avg_comp_rate'] = data[['comp1_rate', 'comp2_rate', 'comp3_rate', 'comp4_rate', 'comp5_rate', 'comp6_rate', 'comp7_rate', 'comp8_rate']].mean(axis=1)
     data = data.drop(['comp1_rate', "comp1_inv", "comp1_rate_percent_diff", 'comp2_rate', "comp2_inv", "comp2_rate_percent_diff", 'comp3_rate', "comp3_inv", "comp3_rate_percent_diff", 'comp4_rate', "comp4_inv", "comp4_rate_percent_diff", 'comp5_rate', "comp5_inv", "comp5_rate_percent_diff", 'comp6_rate', "comp6_inv", "comp6_rate_percent_diff", 'comp7_rate', "comp7_inv", "comp7_rate_percent_diff", 'comp8_rate', "comp8_inv", "comp8_rate_percent_diff"], axis = 1)
@@ -97,31 +108,35 @@ def assign_score(x):
 
 def main():
     path="C://Users//david\Desktop//VU amsterdam//Data mining"
-    data = pd.read_csv(path+"//training_set_VU_DM.csv")
+    data = pd.read_csv(path+"//test_set_VU_DM.csv")
     print("original dataset: \n")
     print(data)
     #downsampling the dataset
-    after_reduction=balancing_dataset(data)
+    #after_reduction=balancing_dataset(data)
     # fill Nan
-    print("Before fill Nan: \n")
-    #after_reduction=data
-    print(after_reduction)
+    #print("Before fill Nan: \n")
+    
+    #COMMENT THIS LINE for TRAINING SET
+    after_reduction=data
+    #print(after_reduction)
     after_nan=fill_nan(after_reduction)
     #add new features
     print("Before add new features: \n")
     print(after_nan)
-    new_data = features_addition(after_nan)
+
+    test= True
+    new_data = features_addition(after_nan, test)
     print("Final dataset: \n")
     print(new_data)
     # add score column (only for train set!):
     #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
-    new_data['score'] = new_data.apply(assign_score , axis=1)
+    #new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool"], axis=1)
+    #new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset
-    new_data.to_csv(path+"/New_train_set.csv")
+    new_data.to_csv(path+"/New_test_set.csv")
 
 
 
