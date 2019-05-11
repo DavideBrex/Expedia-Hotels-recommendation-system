@@ -1,0 +1,2 @@
+[0511/151612.517:ERROR:process_reader_win.cc(151)] SuspendThread: Accesso negato. (0x5)
+[0511/151612.522:ERROR:exception_snapshot_win.cc(98)] thread ID 9028 not found in process
