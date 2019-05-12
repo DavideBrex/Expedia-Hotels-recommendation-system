@@ -8,6 +8,7 @@ def features_addition(dataset, test):
     data=dataset
     data["starrating_diff"] = abs(data["visitor_hist_starrating"] - data["prop_starrating"])
     data["usd_diff"] = abs(np.log10(data["visitor_hist_adr_usd"]) - np.log10(data["price_usd"]))
+    
     data = data.fillna(value = {"starrating_diff": 6, "usd_diff": 1.1})
 
 
