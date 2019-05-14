@@ -78,7 +78,7 @@ def main():
 
     #PARAMETERS of LambdaMART
     stop=10 #after how many equal score (no imporvement) stop
-    num_estimators= 200 #number of trees to use. HIGHER it is LONGER IT takes to run the script
+    num_estimators= 2 #number of trees to use. HIGHER it is LONGER IT takes to run the script
     
     print("\nStart training of LambdaMART...\n")
     trained_model= lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop, num_estimators)
