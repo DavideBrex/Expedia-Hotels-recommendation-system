@@ -31,7 +31,7 @@ def store_output(Epred_r, new_test_set):
     print("\nStore the predictions...\n")
     test_set_submission_result=test_set_submission_result.drop("ranking", axis=1)
     #store the file to submit!
-    test_set_submission_result.to_csv("RESULT_to_submit_testt.csv",  index=False)
+    test_set_submission_result.to_csv("RESULT_to_submit.csv",  index=False)
 
 def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop, num_estim):
     metric = pyltr.metrics.NDCG(k=5)
