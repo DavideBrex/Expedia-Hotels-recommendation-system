@@ -26,11 +26,12 @@ def store_output(Epred_r, new_test_set):
     submiss_test_set["ranking"] = predictions_df
     submiss_test_set["prop_id"]=new_test_set["prop_id"]
     #Group by search id and sort by ranking!
+    print("\nSorting the ranking...\n")
     test_set_submission_result=submiss_test_set.groupby(["srch_id"]).apply(lambda x: x.sort_values(["ranking"], ascending=False)).reset_index(drop=True)
-    
+    print("\nStore the predictions...\n")
     test_set_submission_result=test_set_submission_result.drop("ranking", axis=1)
     #store the file to submit!
-    test_set_submission_result.to_csv("RESULT_to_submit.csv",  index=False)
+    test_set_submission_result.to_csv("RESULT_to_submit_testt.csv",  index=False)
 
 def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop, num_estim):
     metric = pyltr.metrics.NDCG(k=5)
@@ -51,6 +52,7 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
     return model
 
 def main():
+    print("Open the files...")
     # import the train and validation set in the SVMlight format
     full_train=open("C://Users//david\Desktop//VU amsterdam//Data mining//Full_train_lm_split.txt")
     full_valid=open("C://Users//david\Desktop//VU amsterdam//Data mining//Full_validation_lm_split.txt")
@@ -77,13 +79,13 @@ def main():
     #PARAMETERS of LambdaMART
     stop=10 #after how many equal score (no imporvement) stop
     num_estimators= 200 #number of trees to use. HIGHER it is LONGER IT takes to run the script
+    
     print("\nStart training of LambdaMART...\n")
     trained_model= lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop, num_estimators)
     #predict scores for ranking
     print("\nMaking the predictions...\n")
     Epred_test = trained_model.predict(Test_features_r)
     #store the prediction to file
-    print("Store the predictions...")
     store_output(Epred_test, new_test_set)
 
 
