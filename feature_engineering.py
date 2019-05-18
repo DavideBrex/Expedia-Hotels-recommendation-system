@@ -50,7 +50,7 @@ def features_addition(dataset, test):
     #there are some infinite values in usd_diff
     data= data.replace([np.inf, -np.inf], np.nan)
     #train.columns[train.isna().any()].tolist()
-    data=data.fillna(value={"usd_diff":0})
+    data=data.fillna(value={"usd_diff":1.1})
 
     return data
 
