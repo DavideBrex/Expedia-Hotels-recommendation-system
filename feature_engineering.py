@@ -20,8 +20,8 @@ def features_addition(dataset, test):
         hotels_train = pd.read_csv(path+"//hotel_quality.csv")
         hotels_train.columns=["prop_id", "booked_perc", "clicked_perc"]
         data=data.join(hotels_train.set_index("prop_id"),how="left", on="prop_id")
-        #substitue with mean percentage
-        data = data.fillna(value = {"booked_perc": 2.89, "clicked_perc": 5.01})
+        #filling Nan with mean
+        data = data.fillna(value = {"booked_perc": 2.79, "clicked_perc": 4.47})
 
     else:
         # Hotel quality
@@ -38,7 +38,8 @@ def features_addition(dataset, test):
 
         data = data.join(hotel_quality.booked_percentage, on = "prop_id")
         data = data.join(hotel_quality.clicked_percentage, on = "prop_id")
-        data = data.fillna(value = {"booked_percentage": 0, "clicked_percentage": 0})
+        #filling Nan with mean
+        data = data.fillna(value = {"booked_percentage": 2.79, "clicked_percentage": 4.47})
     
     # Average comp price
     data['avg_comp_rate'] = data[['comp1_rate', 'comp2_rate', 'comp3_rate', 'comp4_rate', 'comp5_rate', 'comp6_rate', 'comp7_rate', 'comp8_rate']].mean(axis=1)
@@ -148,12 +149,14 @@ def main():
     print(new_data)
     # add score column (only for train set!):
     #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
+    print("Assigning the score...")
     new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd"], axis=1)
+    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","prop_brand_bool","site_id","srch_saturday_night_bool"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset
+    print("Storing the preprocessed dataset...")
     new_data.to_csv(path+"/New_train_set_full.csv")
 
 
