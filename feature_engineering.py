@@ -10,6 +10,9 @@ def features_addition(dataset, test):
     data["usd_diff"] = abs(np.log10(data["visitor_hist_adr_usd"]) - np.log10(data["price_usd"]))
     
     data = data.fillna(value = {"starrating_diff": 6, "usd_diff": 1.1})
+    #difference between stars and review stars
+    data['ad_vs_real'] = data['prop_starrating'] - data['prop_review_score']
+
 
 
     if test==True:
@@ -47,6 +50,13 @@ def features_addition(dataset, test):
     data["month"] = data["date_time"].dt.month
     data = data.drop("date_time", axis=1)
 
+    #Compose features roomcount_bookwindow, adultcount_childrencount by F1_F2 = F1*max(Max(F2)) + F2
+    data['roomcount_bookwindow'] = data['srch_room_count']*max(data['srch_booking_window']) + data['srch_booking_window']
+    data['adultcount_childrencount'] = data['srch_adults_count']*max(data['srch_children_count']) + data['srch_children_count']
+
+    #1 if hotel is in the same country
+    data['bool_same_country'] = 0
+    data.loc[(data['visitor_location_country_id'] == data['prop_country_id']), 'bool_same_country'] = 1
     #there are some infinite values in usd_diff
     data= data.replace([np.inf, -np.inf], np.nan)
     #train.columns[train.isna().any()].tolist()
@@ -56,10 +66,11 @@ def features_addition(dataset, test):
 
 def fill_nan(data):
     #Drop "orig_destination_distance"
-    data.drop("orig_destination_distance", axis=1, inplace=True)
+    #data.drop("orig_destination_distance", axis=1, inplace=True)
     #replace NaN for zero
+    data["orig_destination_distance"]=data["orig_destination_distance"].replace(np.nan, data["orig_destination_distance"].quantile(0.75))
     data["prop_review_score"] = data["prop_review_score"].replace(np.nan, 0)
-    data["prop_location_score2"] = data["prop_location_score2"].replace(np.nan, 0)
+    data["prop_location_score2"] = data["prop_location_score2"].replace(np.nan, data["prop_location_score2"].median(axis = 0, skipna=True))
     
     #replace NaN for worst case scenario, in this case -326.567500 which is the minimum value for this feature
     data["srch_query_affinity_score"] = data["srch_query_affinity_score"].replace(np.nan, -326.567500)
@@ -70,6 +81,11 @@ def fill_nan(data):
     median_vha=data["visitor_hist_adr_usd"].median(axis = 0, skipna=True) 
     values = {'visitor_hist_starrating': median_vhs, 'visitor_hist_adr_usd': median_vha}
     data=data.fillna(value=values)
+
+    #removing outliers
+    indices_to_remove = data[data['price_usd'] > 50000].index.tolist()
+    data = data.drop(indices_to_remove)
+
     return data
 
 def balancing_dataset(data):
@@ -125,7 +141,7 @@ def main():
     print("Before add new features: \n")
     print(after_nan)
 
-    #CHANGE BELOW for training
+    #CHANGE lines BELOW for training
     test= False
     new_data = features_addition(after_nan, test)
     print("Final dataset: \n")
@@ -134,7 +150,7 @@ def main():
     #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
     new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool"], axis=1)
+    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset
