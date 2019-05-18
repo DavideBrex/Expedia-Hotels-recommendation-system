@@ -18,5 +18,5 @@ We have to keep track of the when we performed some tasks
 | 13/05 | Fourth submission with more estimators --> 0.365 | Den |
 | 14/05 | Report writing | M and Dav|
 | 16/05 | Testing a new scoring system --> no improvements | Dav
-
+| 18/05 | Removed outliers, Added new features: same country boolean, roomcount_bookwindow, adultcount_childrencount, difference real stars and reviews star| Dav|
 
