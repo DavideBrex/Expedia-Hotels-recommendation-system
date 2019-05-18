@@ -15,6 +15,7 @@ We have to keep track of the when we performed some tasks
 | 11/05 | Second submission with whole dataset of ELastic net --> 0.30  |  Dav |
 | 10/05 | removed prop_id from features   |  Dav |
 | 12/05 | Thirth submission with whole dataset of LambdaMART --> 0.34   |  Dav |
-
+| 14/05 | Report writing | M and Dav|
+| 16/05 | Testing a new scoring system --> no improvements | Dav
 
 
