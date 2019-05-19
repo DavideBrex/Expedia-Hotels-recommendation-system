@@ -36,17 +36,16 @@ def store_output(Epred_r, new_test_set):
 
 
 def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop, num_estim):
+   
     metric = pyltr.metrics.NDCG(k=5)
-
     monitor = pyltr.models.monitors.ValidationMonitor(Val_features, Val_scores, Val_qids, metric=metric,
                                                       stop_after=stop)
-
     model = pyltr.models.LambdaMART(
         metric=metric,
         n_estimators=num_estim,
         max_features=0.5,
         query_subsample=0.5,
-        max_leaf_nodes=15,
+        max_leaf_nodes=10,
         min_samples_leaf=64,
         verbose=1,
     )
@@ -82,7 +81,7 @@ def main():
 
     # PARAMETERS of LambdaMART
     stop = 15  # after how many equal score (no imporvement) stop
-    num_estimators = 350  # number of trees to use. HIGHER it is LONGER IT takes to run the script
+    num_estimators = 500  # number of trees to use. HIGHER it is LONGER IT takes to run the script
 
     print("\nStart training of LambdaMART...\n")
     trained_model = lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop,

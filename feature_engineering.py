@@ -127,7 +127,7 @@ def assign_score(x):
 def main():
     print("Reading the file...")
     path="C://Users//david\Desktop//VU amsterdam//Data mining"
-    data = pd.read_csv(path+"//test_set_VU_DM.csv")
+    data = pd.read_csv(path+"//training_set_VU_DM.csv")
     print("original dataset: \n")
     print(data)
     #downsampling the dataset
@@ -135,7 +135,6 @@ def main():
     # fill Nan
     #print("Before fill Nan: \n")
     print("Filling the Nan..")
-    #COMMENT THIS LINE for TRAINING SET
     after_reduction=data
     #print(after_reduction)
     after_nan=fill_nan(after_reduction)
@@ -144,22 +143,22 @@ def main():
     print(after_nan)
     print("Adding some features...")
     #CHANGE lines BELOW for training
-    test= True
+    test= False
     new_data = features_addition(after_nan, test)
     print("Final dataset: \n")
     print(new_data)
     # add score column (only for train set!):
     #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
     #print("Assigning the score...")
-    #new_data['score'] = new_data.apply(assign_score , axis=1)
+    new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    #new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","site_id"], axis=1)
-    new_data=new_data.drop(["random_bool" ,"site_id"], axis=1)
+    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","site_id"], axis=1)
+    #new_data=new_data.drop(["random_bool" ,"site_id"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset
     print("Storing the preprocessed dataset...")
-    new_data.to_csv(path+"/New_test_set_full.csv")
+    new_data.to_csv(path+"/New_train_set_full.csv")
 
 
 
