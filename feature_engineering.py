@@ -21,7 +21,7 @@ def features_addition(dataset, test):
         hotels_train.columns=["prop_id", "booked_perc", "clicked_perc"]
         data=data.join(hotels_train.set_index("prop_id"),how="left", on="prop_id")
         #filling Nan with mean
-        data = data.fillna(value = {"booked_perc": 2.79, "clicked_perc": 4.47})
+        data = data.fillna(value = {"booked_perc": 1.92, "clicked_perc": 2.74})
 
     else:
         # Hotel quality
@@ -39,7 +39,7 @@ def features_addition(dataset, test):
         data = data.join(hotel_quality.booked_percentage, on = "prop_id")
         data = data.join(hotel_quality.clicked_percentage, on = "prop_id")
         #filling Nan with mean
-        data = data.fillna(value = {"booked_percentage": 2.79, "clicked_percentage": 4.47})
+        data = data.fillna(value = {"booked_percentage": 1.92, "clicked_percentage": 2.74})
     
     # Average comp price
     data['avg_comp_rate'] = data[['comp1_rate', 'comp2_rate', 'comp3_rate', 'comp4_rate', 'comp5_rate', 'comp6_rate', 'comp7_rate', 'comp8_rate']].mean(axis=1)
@@ -153,8 +153,8 @@ def main():
     #print("Assigning the score...")
     #new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    #new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","prop_brand_bool","site_id","srch_saturday_night_bool"], axis=1)
-    new_data=new_data.drop(["random_bool" ,"prop_brand_bool","site_id","srch_saturday_night_bool"], axis=1)
+    #new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","site_id"], axis=1)
+    new_data=new_data.drop(["random_bool" ,"site_id"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset

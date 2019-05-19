@@ -44,11 +44,11 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
     model = pyltr.models.LambdaMART(
         metric=metric,
         n_estimators=num_estim,
-        max_features=0.75,
-        #max_leaf_nodes=15,
-        query_subsample=0.6,
-        min_samples_leaf=40,
-        verbose=2,
+        max_features=0.5,
+        query_subsample=0.5,
+        max_leaf_nodes=15,
+        min_samples_leaf=64,
+        verbose=1,
     )
     # fit lambdaMART
     model.fit(Train_features, Train_scores, Train_qids, monitor=monitor)
@@ -81,8 +81,8 @@ def main():
     full_valid.close()
 
     # PARAMETERS of LambdaMART
-    stop = 20  # after how many equal score (no imporvement) stop
-    num_estimators = 500  # number of trees to use. HIGHER it is LONGER IT takes to run the script
+    stop = 15  # after how many equal score (no imporvement) stop
+    num_estimators = 350  # number of trees to use. HIGHER it is LONGER IT takes to run the script
 
     print("\nStart training of LambdaMART...\n")
     trained_model = lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop,
