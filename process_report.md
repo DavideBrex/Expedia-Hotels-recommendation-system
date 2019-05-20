@@ -19,4 +19,6 @@ We have to keep track of the when we performed some tasks
 | 14/05 | Report writing | M and Dav|
 | 16/05 | Testing a new scoring system --> no improvements | Dav
 | 18/05 | Removed outliers, Added new features: same country boolean, roomcount_bookwindow, adultcount_childrencount, difference real stars and reviews star| Dav|
+| 19/05 | Report writing : related work | M|
+| 20/05 | Tested mdoel trained with new features --> no improvements (0.36131)| Dav|
 
