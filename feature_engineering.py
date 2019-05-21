@@ -149,11 +149,11 @@ def main():
     print(new_data)
     # add score column (only for train set!):
     #Adding Score columns: 5 for booked, 1 clicked and 0 the rest
-    #print("Assigning the score...")
+    print("Assigning the score...")
     new_data['score'] = new_data.apply(assign_score , axis=1)
 
-    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","site_id"], axis=1)
-    #new_data=new_data.drop(["random_bool" ,"site_id"], axis=1)
+    new_data=new_data.drop(["random_bool" ,"booking_bool", "click_bool","gross_bookings_usd","site_id",'srch_saturday_night_bool',"srch_query_affinity_score","month","srch_room_count","srch_children_count","visitor_hist_adr_usd"], axis=1)
+    #new_data=new_data.drop(["random_bool" ,"site_id",'srch_saturday_night_bool',"srch_query_affinity_score","month","srch_room_count","srch_children_count","visitor_hist_adr_usd"], axis=1)
     #drop search id?
     #new_data = new_data.drop("srch_id", axis=1)
     #store resulting dataset

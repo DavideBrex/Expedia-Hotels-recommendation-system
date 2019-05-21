@@ -44,6 +44,7 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
         metric=metric,
         n_estimators=num_estim,
         max_features=0.5,
+        learning_rate=0.1
         query_subsample=0.5,
         max_leaf_nodes=10,
         min_samples_leaf=64,
