@@ -44,7 +44,7 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
         metric=metric,
         n_estimators=num_estim,
         max_features=0.5,
-        learning_rate=0.1
+        learning_rate=0.1,
         query_subsample=0.5,
         max_leaf_nodes=10,
         min_samples_leaf=64,
@@ -81,8 +81,8 @@ def main():
     full_valid.close()
 
     # PARAMETERS of LambdaMART
-    stop = 15  # after how many equal score (no imporvement) stop
-    num_estimators = 500  # number of trees to use. HIGHER it is LONGER IT takes to run the script
+    stop = 150  # after how many equal score (no imporvement) stop
+    num_estimators = 1000  # number of trees to use. HIGHER it is LONGER IT takes to run the script
 
     print("\nStart training of LambdaMART...\n")
     trained_model = lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop,
