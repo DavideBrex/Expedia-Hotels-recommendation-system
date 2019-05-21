@@ -44,7 +44,7 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
         metric=metric,
         n_estimators=num_estim,
         max_features=0.5,
-        learning_rate=0.1,
+        learning_rate=0.02,
         query_subsample=0.5,
         max_leaf_nodes=10,
         min_samples_leaf=64,
@@ -58,13 +58,13 @@ def lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scor
 def main():
     print("Open the files...")
     # import the train and validation set in the SVMlight format
-    full_train = open("C://Users//david\Desktop//VU amsterdam//Data mining//Full_train_lm_split.txt")
-    full_valid = open("C://Users//david\Desktop//VU amsterdam//Data mining//Full_validation_lm_split.txt")
-    full_test = open("C://Users//david//Desktop//VU amsterdam//Data mining//Preprocessed_test_set.txt")
+    full_train = open("C://Users//Dennis//Documents//Bioinformatics//Data_mining//Data_mining_assignment_2//Secondattempt//Full_train_lm_split.txt")
+    full_valid = open("C://Users//Dennis//Documents//Bioinformatics//Data_mining//Data_mining_assignment_2//Secondattempt//Full_validation_lm_split.txt")
+    full_test = open("C://Users//Dennis//Documents//Bioinformatics//Data_mining//Data_mining_assignment_2//Secondattempt//Preprocessed_test_set.txt")
 
     # load test set in normal format
     print("Load the normal test set...")
-    path = "C://Users//david\Desktop//VU amsterdam//Data mining"
+    path = "C://Users//Dennis//Documents//Bioinformatics//Data_mining//Data_mining_assignment_2//Secondattempt//"
     new_test_set = pd.read_csv(path + "/New_test_set_full.csv")
     new_test_set = new_test_set.drop(["Unnamed: 0"], axis=1)
 
@@ -81,8 +81,8 @@ def main():
     full_valid.close()
 
     # PARAMETERS of LambdaMART
-    stop = 150  # after how many equal score (no imporvement) stop
-    num_estimators = 1000  # number of trees to use. HIGHER it is LONGER IT takes to run the script
+    stop = 100  # after how many equal score (no imporvement) stop
+    num_estimators = 2000  # number of trees to use. HIGHER it is LONGER IT takes to run the script
 
     print("\nStart training of LambdaMART...\n")
     trained_model = lambda_mart(Train_features, Train_scores, Train_qids, Val_features, Val_scores, Val_qids, stop,
